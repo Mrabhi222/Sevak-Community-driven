@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="F:/Repos/Sevak.Application/Sevak.Application.csproj" />
+  <Project Path="F:/Repos/Sevak.Domain/Sevak.Domain.csproj" />
+  <Project Path="F:/Repos/Sevak.Infrastructure/Sevak.Infrastructure.csproj" />
+  <Project Path="Sevak.API.csproj" />
+</Solution>
