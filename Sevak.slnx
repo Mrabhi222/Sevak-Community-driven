@@ -2,5 +2,5 @@
   <Project Path="Sevak.Application/Sevak.Application.csproj" />
   <Project Path="Sevak.Domain/Sevak.Domain.csproj" />
   <Project Path="Sevak.Infrastructure/Sevak.Infrastructure.csproj" />
-  <Project Path="Sevak.API.csproj" />
+  <Project Path="Sevak.API/Sevak.API.csproj" />
 </Solution>

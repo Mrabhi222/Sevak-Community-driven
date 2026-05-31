@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Sevak.Infrastructure\Sevak.Infrastructure.csproj" />
+    <ProjectReference Include="..\Sevak.Infrastructure\Sevak.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
