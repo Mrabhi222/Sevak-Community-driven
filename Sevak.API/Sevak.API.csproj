@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sevak.Application\Sevak.Application.csproj" />
+    <ProjectReference Include="..\Sevak.Domain\Sevak.Domain.csproj" />
     <ProjectReference Include="..\Sevak.Infrastructure\Sevak.Infrastructure.csproj" />
   </ItemGroup>
 

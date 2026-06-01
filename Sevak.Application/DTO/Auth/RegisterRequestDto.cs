@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using Sevak.Domain.Enums;
 
 namespace Sevak.Application.DTO.Auth;
 
 public class RegisterRequestDto
 {
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public string Role { get; set; } // "Organizer" or "Volunteer"
+    [Required] public string Name { get; set; }
+    [Required, EmailAddress] public string Email { get; set; }
+    [Required] public string Password { get; set; }
+    [Required] public UserRole Role { get; set; }
     public string? Location { get; set; }
 }

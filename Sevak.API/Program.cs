@@ -1,6 +1,7 @@
 ﻿using Sevak.Infrastructure.Data;
 using Sevak.Application.Interfaces;
 using Sevak.Infrastructure.Services;
+using Sevak.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +38,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Register Services
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 //builder.Services.AddScoped<IEventService, EventService>();
 

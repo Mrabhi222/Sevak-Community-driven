@@ -1,8 +1,6 @@
-﻿namespace Sevak.API.Controllers;
+namespace Sevak.API.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Sevak.Application.DTO.Auth;
-using Sevak.Application.DTO.Common;
 using Sevak.Application.DTO.Auth;
 using Sevak.Application.DTO.Common;
 using Sevak.Application.Interfaces;
