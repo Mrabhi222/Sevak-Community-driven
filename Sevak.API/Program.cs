@@ -33,15 +33,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            RoleClaimType = "role"
         };
     });
 
 // Register Services
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-//builder.Services.AddScoped<IEventService, EventService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
