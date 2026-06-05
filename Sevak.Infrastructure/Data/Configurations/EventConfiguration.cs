@@ -22,6 +22,9 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .HasForeignKey(e => e.OrganizerId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(e => e.EventDate).HasColumnType("timestamptz");
+        builder.Property(e => e.CreatedAt).HasColumnType("timestamptz");
+
         builder.HasIndex(e => e.EventDate);
         builder.HasIndex(e => e.Status);
     }

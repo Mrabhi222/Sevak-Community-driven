@@ -23,14 +23,16 @@ public class EventRepository : IEventRepository
         _context.Events.Include(e => e.Organizer).Include(e => e.Volunteers)
         .FirstOrDefaultAsync(e => e.Id == eventId);
 
-    public Task<List<Event>> GetUpcomingAsync(int page, int pageSize) =>
-        _context.Events.Where(e => e.EventDate > DateTime.UtcNow && e.Status != EventStatus.Cancelled)
+    public Task<List<Event>> GetUpcomingAsync(int page, int pageSize)
+    {
+        return _context.Events
         .OrderBy(e => e.EventDate)
         .Skip((page - 1) * pageSize)
         .Take(pageSize)
         .Include(e => e.Organizer)
         .Include(e => e.Volunteers)
         .ToListAsync();
+    }
 
     public async Task AddAsync(Event @event) => await _context.Events.AddAsync(@event);
 

@@ -17,7 +17,7 @@ public class EventService : IEventService
         {
             Title = dto.Title,
             Description = dto.Description,
-            EventDate = dto.EventDate,
+            EventDate = DateTime.SpecifyKind(dto.EventDate, DateTimeKind.Utc),
             Location = dto.Location,
             VolunteerCap = dto.VolunteerCap,
             OrganizerId = organizerId,

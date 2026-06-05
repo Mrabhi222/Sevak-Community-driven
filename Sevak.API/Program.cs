@@ -1,4 +1,4 @@
-﻿using Sevak.Infrastructure.Data;
+using Sevak.Infrastructure.Data;
 using Sevak.Application.Interfaces;
 using Sevak.Infrastructure.Services;
 using Sevak.Infrastructure.Repositories;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Scalar.AspNetCore;
+using Sevak.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +35,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-            RoleClaimType = "role"
+            RoleClaimType = "role",
+            NameClaimType = "sub"
         };
+        options.MapInboundClaims = false;
     });
 
 // Register Services
@@ -67,9 +70,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapOpenApi();
-app.UseCors("AllowReact");
 app.MapScalarApiReference();
 app.UseHttpsRedirection();
+app.UseCors("AllowReact");
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
