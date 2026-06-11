@@ -1,15 +1,29 @@
-using Sevak.Infrastructure.Data;
-using Sevak.Application.Interfaces;
-using Sevak.Infrastructure.Services;
-using Sevak.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Scalar.AspNetCore;
 using Sevak.API.Middleware;
+using Sevak.Application.Interfaces;
+using Sevak.Infrastructure.AI;
+using Sevak.Infrastructure.Data;
+using Sevak.Infrastructure.Repositories;
+using Sevak.Infrastructure.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Get Ollama settings
+var ollamaSettings = new OllamaSettings();
+builder.Configuration.GetSection("AiSettings").Bind(ollamaSettings);
+builder.Services.AddSingleton(ollamaSettings);
+
+// Add HttpClient for Ollama
+builder.Services.AddHttpClient<OllamaApiClient>()
+    .ConfigureHttpClient(client =>
+    {
+        client.BaseAddress = new Uri(ollamaSettings.OllamaBaseUrl);
+        client.Timeout = TimeSpan.FromMinutes(5);
+    });
 
 // PostgreSQL Database
 builder.Services.AddDbContext<SevakDbContext>(options =>
@@ -47,6 +61,8 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<EventRecommendationAgent>();
 
 
 builder.Services.AddControllers();

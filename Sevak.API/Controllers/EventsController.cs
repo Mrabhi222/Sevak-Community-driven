@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sevak.Application.DTO.Common;
 using Sevak.Application.DTO.Event;
 using Sevak.Application.Interfaces;
+using Sevak.Infrastructure.AI;
 using System.Collections.Generic;
 
 namespace Sevak.API.Controllers
@@ -13,12 +14,16 @@ namespace Sevak.API.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly EventRecommendationAgent _recommendationAgent;
+
         private readonly ILogger<EventsController> _logger;
 
-        public EventsController(IEventService eventService, ILogger<EventsController> logger)
+        public EventsController(IEventService eventService, ILogger<EventsController> logger, EventRecommendationAgent recommendationAgent)
         {
             _eventService = eventService;
             _logger = logger;
+            _recommendationAgent = recommendationAgent;
+
         }
 
         [HttpGet]
@@ -126,6 +131,53 @@ namespace Sevak.API.Controllers
                 {
                     Success = false,
                     Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("recommendations")]
+        [Authorize(Roles = "Volunteer")]
+        public async Task<ActionResult<ApiResponseDto<List<RecommendedEventDto>>>> GetRecommendations(
+    [FromQuery] int limit = 5)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirst("sub")?.Value ?? "0");
+
+                var recommendations = await _recommendationAgent.GetRecommendationsAsync(userId, limit);
+
+                return Ok(new ApiResponseDto<List<RecommendedEventDto>>
+                {
+                    Success = true,
+                    Data = recommendations,
+                    Message = $"Found {recommendations.Count} recommended events"
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Ollama service unavailable");
+                return StatusCode(503, new ApiResponseDto<List<RecommendedEventDto>>
+                {
+                    Success = false,
+                    Message = "AI service unavailable. Make sure Ollama is running.",
+                    Errors = new List<string> { ex.Message }
+                });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponseDto<List<RecommendedEventDto>>
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting recommendations");
+                return StatusCode(500, new ApiResponseDto<List<RecommendedEventDto>>
+                {
+                    Success = false,
+                    Message = "Error generating recommendations"
                 });
             }
         }

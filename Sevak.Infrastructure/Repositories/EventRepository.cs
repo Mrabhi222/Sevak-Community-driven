@@ -1,12 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sevak.Application.DTO.Event;
 using Sevak.Application.Interfaces;
 using Sevak.Domain.Entities;
-using Sevak.Domain.Enums;
 using Sevak.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Sevak.Infrastructure.Repositories;
 

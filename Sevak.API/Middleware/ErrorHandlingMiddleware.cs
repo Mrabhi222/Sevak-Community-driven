@@ -29,7 +29,7 @@ public class ErrorHandlingMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    public static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
       
         context.Response.ContentType = "application/json";
