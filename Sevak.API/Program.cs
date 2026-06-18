@@ -13,15 +13,14 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Get Ollama settings
-var ollamaSettings = new OllamaSettings();
-builder.Configuration.GetSection("AiSettings").Bind(ollamaSettings);
-builder.Services.AddSingleton(ollamaSettings);
+var aiSettings = new AiSettings();
+builder.Configuration.GetSection("AiSettings").Bind(aiSettings);
+builder.Services.AddSingleton(aiSettings);
 
-// Add HttpClient for Ollama
 builder.Services.AddHttpClient<OllamaApiClient>()
     .ConfigureHttpClient(client =>
     {
-        client.BaseAddress = new Uri(ollamaSettings.OllamaBaseUrl);
+        client.BaseAddress = new Uri(aiSettings.BaseUrl);
         client.Timeout = TimeSpan.FromMinutes(5);
     });
 
